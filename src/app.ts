@@ -1,29 +1,12 @@
-class PhoneNumberDirective {
-    constructor(public element: HTMLElement) { }
+import { CreditCardDirective } from "./directives/credit-card-directive";
+import { PhoneNumberDirective } from "./directives/phone-number.directive";
 
-    formatPhoneNumber(element: HTMLInputElement) {        
-            const value = element.value.replace(/[^\d]/g,'').substring(0,10);
-            const groups: string[] = [];
-            for (let i = 0; i < value.length; i += 2){
-                groups.push(value.substring(i, i + 2));
-            }
-            console.log(groups);
-            element.value = groups.join(' ');
-    }
+const directives = [PhoneNumberDirective, CreditCardDirective];
 
-    init() {
-        this.element.style.borderColor = "red";
-
-        this.element.addEventListener('input', (event) => {
-            this.formatPhoneNumber(event.target as HTMLInputElement);
-        })
-    }
-
-}
-
-const phoneElements = document.querySelectorAll<HTMLElement>('[phone-number]');
-phoneElements.forEach(element => {
-    const directive = new PhoneNumberDirective(element);
-    directive.init();
+directives.forEach(directive => {
+    const elements = document.querySelectorAll<HTMLElement>(directive.selector);
+    elements.forEach(element => {
+        const directiveInstance = new directive(element);
+        directiveInstance.init();
+    }) 
 })
-
